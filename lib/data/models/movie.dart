@@ -1,0 +1,101 @@
+import 'dart:convert';
+
+class Movie {
+  Movie({
+    required this.adult,
+    this.backdropPath,
+    required this.genreIds,
+    required this.id,
+    required this.originalLanguage,
+    required this.originalTitle,
+    required this.overview,
+    required this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    required this.title,
+    required this.video,
+    required this.voteAverage,
+    required this.voteCount,
+    this.heroId,
+  });
+
+  bool adult;
+  String? backdropPath;
+  List<int> genreIds;
+  int id;
+  String originalLanguage;
+  String originalTitle;
+  String overview;
+  double popularity;
+  String? posterPath;
+  String? releaseDate;
+  String title;
+  bool video;
+  double voteAverage;
+  int voteCount;
+
+  String? heroId;
+
+  get fullPosterImg {
+    if (posterPath != null) {
+      return 'https://image.tmdb.org/t/p/w500${posterPath}';
+    }
+
+    return 'https://xivahokimiyat.uz/templates/Reflex/dleimages/no_image.jpg';
+  }
+
+  get fullBackdropPath {
+    if (backdropPath != null) {
+      return 'https://image.tmdb.org/t/p/w500${backdropPath}';
+    }
+
+    return 'https://xivahokimiyat.uz/templates/Reflex/dleimages/no_image.jpg';
+  }
+
+  factory Movie.fromJson(String str, Map<String, Object?> s) =>
+      Movie.fromMap(json.decode(str));
+
+  factory Movie.fromMap(Map<String, dynamic> json) => Movie(
+        adult: json["adult"],
+        backdropPath: json["backdrop_path"],
+        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+        id: json["id"],
+        originalLanguage: json["original_language"],
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: json["popularity"].toDouble(),
+        posterPath: json["poster_path"],
+        releaseDate: json["release_date"],
+        title: json["title"],
+        video: json["video"],
+        voteAverage: json["vote_average"].toDouble(),
+        voteCount: json["vote_count"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "original_title": originalTitle,
+        "poster_path_img": fullPosterImg,
+        "backdrop_path_img": fullBackdropPath,
+        "rating": voteAverage,
+        "overview": overview,
+      };
+
+  factory Movie.fromMapDB(Map<String, dynamic> json) => Movie(
+        genreIds: [0],
+        adult: false,
+        backdropPath: json["backdrop_path_img"],
+        id: json["id"],
+        originalLanguage: '',
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: 0,
+        posterPath: json["poster_path_img"],
+        releaseDate: '',
+        title: json["title"],
+        video: false,
+        voteAverage: double.parse(json["rating"]),
+        voteCount: 0,
+      );
+}
